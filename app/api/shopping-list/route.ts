@@ -126,3 +126,24 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ items: items ?? [] })
 }
+
+// DELETE /api/shopping-list?week_id=xxx — clear entire list for the week
+export async function DELETE(req: NextRequest) {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const { searchParams } = new URL(req.url)
+  const weekId = searchParams.get('week_id')
+  if (!weekId) return NextResponse.json({ error: 'week_id is required' }, { status: 400 })
+
+  await supabase
+    .from('shopping_list_items')
+    .delete()
+    .eq('week_id', weekId)
+    .eq('user_id', user.id)
+
+  return NextResponse.json({ ok: true })
+}

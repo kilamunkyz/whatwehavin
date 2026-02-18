@@ -12,6 +12,7 @@ interface Props {
 export function ShoppingClient({ week, initialItems }: Props) {
   const [items, setItems] = useState<ShoppingListItem[]>(initialItems)
   const [generating, setGenerating] = useState(false)
+  const [clearing, setClearing] = useState(false)
   const [newItem, setNewItem] = useState('')
   const [addingItem, setAddingItem] = useState(false)
 
@@ -31,6 +32,16 @@ export function ShoppingClient({ week, initialItems }: Props) {
       setItems(newItems)
     }
     setGenerating(false)
+  }
+
+  async function handleClear() {
+    if (!confirm('Clear the entire shopping list?')) return
+    setClearing(true)
+    const res = await fetch(`/api/shopping-list?week_id=${week.id}`, {
+      method: 'DELETE',
+    })
+    if (res.ok) setItems([])
+    setClearing(false)
   }
 
   async function handleToggle(item: ShoppingListItem) {
@@ -69,30 +80,42 @@ export function ShoppingClient({ week, initialItems }: Props) {
 
   return (
     <div className="max-w-xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-stone-800">Shopping List</h1>
           <p className="text-sm text-stone-400">
             {checkedCount}/{items.length} items ticked off
           </p>
         </div>
-        <button
-          onClick={handleRegenerate}
-          disabled={generating}
-          className="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 disabled:opacity-50 transition-colors flex items-center gap-2"
-        >
-          {generating ? (
-            <>
-              <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-              </svg>
-              Generating…
-            </>
-          ) : (
-            '↻ Generate from plan'
+        <div className="flex flex-col gap-2 items-end">
+          <button
+            onClick={handleRegenerate}
+            disabled={generating}
+            className="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 disabled:opacity-50 transition-colors flex items-center gap-2"
+          >
+            {generating ? (
+              <>
+                <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                </svg>
+                Generating…
+              </>
+            ) : (
+              '↻ Generate from plan'
+            )}
+          </button>
+          {items.length > 0 && (
+            <button
+              onClick={handleClear}
+              disabled={clearing}
+              className="px-4 py-2 text-red-500 border border-red-200 rounded-lg text-sm font-medium hover:bg-red-50 disabled:opacity-50 transition-colors"
+            >
+              {clearing ? 'Clearing…' : '🗑 Clear list'}
+            </button>
           )}
-        </button>
+        </div>
       </div>
 
       {items.length === 0 && (
