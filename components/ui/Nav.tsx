@@ -10,7 +10,7 @@ const links = [
   { href: '/recipes', label: 'Recipes' },
   { href: '/planner', label: 'Planner' },
   { href: '/shopping', label: 'Shopping' },
-  { href: '/pub-menu', label: 'Pub Menu' },
+  { href: '/pub-menu', label: 'Menu Generator' },
 ]
 
 export function Nav() {
@@ -28,23 +28,33 @@ export function Nav() {
 
   return (
     <nav className="bg-white border-b border-stone-200 sticky top-0 z-40">
-      <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-16">
-        <Link href="/recipes" className="flex items-center">
-          <Image
-            src="/logo.png"
-            alt="WhatWeHavin"
-            width={160}
-            height={48}
-            className="h-10 w-auto object-contain"
-            priority
-          />
-        </Link>
-        <div className="flex items-center gap-1">
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Logo row */}
+        <div className="flex items-center justify-between py-2 border-b border-stone-100">
+          <Link href="/recipes" className="flex items-center">
+            <Image
+              src="/logo.png"
+              alt="WhatWeHavin"
+              width={200}
+              height={60}
+              className="h-10 w-auto object-contain"
+              priority
+            />
+          </Link>
+          <button
+            onClick={handleSignOut}
+            className="text-sm text-stone-400 hover:text-stone-700 transition-colors"
+          >
+            Sign out
+          </button>
+        </div>
+        {/* Nav links row */}
+        <div className="flex items-center gap-1 py-1.5 overflow-x-auto scrollbar-hide">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              className={`shrink-0 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                 pathname.startsWith(link.href)
                   ? 'bg-amber-100 text-amber-800'
                   : 'text-stone-600 hover:bg-stone-100'
@@ -53,12 +63,6 @@ export function Nav() {
               {link.label}
             </Link>
           ))}
-          <button
-            onClick={handleSignOut}
-            className="ml-3 px-3 py-1.5 text-sm text-stone-500 hover:text-stone-800"
-          >
-            Sign out
-          </button>
         </div>
       </div>
     </nav>

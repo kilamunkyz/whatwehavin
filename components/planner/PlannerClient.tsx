@@ -87,83 +87,69 @@ export function PlannerClient({ week, initialSlots, allRecipes, weekStart }: Pro
     setSlots((prev) => prev.filter((s) => s.id !== slotId))
   }
 
-  const isCurrentWeek =
-    weekStart === toDateString(new Date())
-
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-w-2xl mx-auto">
       {/* Week navigation */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <h1 className="text-2xl font-bold text-stone-800">Meal Planner</h1>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigateWeek(-1)}
-            className="px-3 py-1.5 border border-stone-300 rounded-lg text-sm hover:bg-stone-100 transition-colors"
-          >
-            ← Prev
-          </button>
-          <span className="text-sm font-medium text-stone-600 min-w-[160px] text-center">
-            {formatDisplayDate(weekStartDate)} –{' '}
-            {formatDisplayDate(weekDates[6])}
-          </span>
-          <button
-            onClick={() => navigateWeek(1)}
-            className="px-3 py-1.5 border border-stone-300 rounded-lg text-sm hover:bg-stone-100 transition-colors"
-          >
-            Next →
-          </button>
-          <Link
-            href="/shopping"
-            className="ml-2 px-3 py-1.5 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 transition-colors"
-          >
-            🛒 Shopping list
-          </Link>
-        </div>
+        <Link
+          href="/shopping"
+          className="px-3 py-1.5 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 transition-colors"
+        >
+          🛒 Shopping list
+        </Link>
       </div>
 
-      {/* Grid */}
-      <div className="overflow-x-auto">
-        <div className="min-w-[700px]">
-          {/* Day headers */}
-          <div className="grid grid-cols-[80px_repeat(7,1fr)] gap-1 mb-1">
-            <div />
-            {DAYS.map((day, i) => (
-              <div key={day} className="text-center">
-                <div className="text-xs font-semibold text-stone-500 uppercase tracking-wide">
-                  {day}
-                </div>
-                <div className="text-xs text-stone-400">
-                  {formatDisplayDate(weekDates[i])}
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* Week selector */}
+      <div className="flex items-center justify-between bg-white border border-stone-200 rounded-xl px-4 py-2">
+        <button
+          onClick={() => navigateWeek(-1)}
+          className="px-3 py-1.5 border border-stone-300 rounded-lg text-sm hover:bg-stone-100 transition-colors"
+        >
+          ← Prev
+        </button>
+        <span className="text-sm font-medium text-stone-600 text-center">
+          {formatDisplayDate(weekStartDate)} – {formatDisplayDate(weekDates[6])}
+        </span>
+        <button
+          onClick={() => navigateWeek(1)}
+          className="px-3 py-1.5 border border-stone-300 rounded-lg text-sm hover:bg-stone-100 transition-colors"
+        >
+          Next →
+        </button>
+      </div>
 
-          {/* Meal rows */}
-          {MEAL_TYPES.map((mealType) => (
-            <div
-              key={mealType}
-              className="grid grid-cols-[80px_repeat(7,1fr)] gap-1 mb-1"
-            >
-              <div className="flex items-center">
-                <span className="text-xs font-semibold text-stone-400 uppercase tracking-wide capitalize">
-                  {mealType}
-                </span>
-              </div>
-              {DAYS.map((_, dayIndex) => {
+      {/* Vertical day list */}
+      <div className="space-y-3">
+        {DAYS.map((day, dayIndex) => (
+          <div key={day} className="bg-white border border-stone-200 rounded-xl overflow-hidden">
+            {/* Day header */}
+            <div className="bg-stone-50 border-b border-stone-200 px-4 py-2 flex items-center justify-between">
+              <span className="font-semibold text-stone-700">{day}</span>
+              <span className="text-xs text-stone-400">{formatDisplayDate(weekDates[dayIndex])}</span>
+            </div>
+            {/* Meal slots */}
+            <div className="divide-y divide-stone-100">
+              {MEAL_TYPES.map((mealType) => {
                 const slot = getSlot(dayIndex, mealType)
                 return (
-                  <MealCell
-                    key={dayIndex}
-                    slot={slot}
-                    onAdd={() => setPickerTarget({ dayIndex, mealType })}
-                    onRemove={() => slot && handleRemoveSlot(slot.id)}
-                  />
+                  <div key={mealType} className="flex items-center gap-3 px-4 py-2.5">
+                    <span className="text-xs font-semibold text-stone-400 uppercase tracking-wide w-16 shrink-0 capitalize">
+                      {mealType}
+                    </span>
+                    <div className="flex-1">
+                      <MealCell
+                        slot={slot}
+                        onAdd={() => setPickerTarget({ dayIndex, mealType })}
+                        onRemove={() => slot && handleRemoveSlot(slot.id)}
+                      />
+                    </div>
+                  </div>
                 )
               })}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
 
       {/* Recipe picker modal */}
@@ -194,20 +180,20 @@ function MealCell({
   if (slot) {
     const label = slot.recipe?.title ?? slot.free_text ?? '?'
     return (
-      <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 min-h-[64px] group relative">
+      <div className="flex items-center justify-between gap-2 group">
         {slot.recipe ? (
           <Link
             href={`/recipes/${slot.recipe.id}`}
-            className="text-xs font-medium text-amber-800 leading-snug line-clamp-3 hover:underline block"
+            className="text-sm font-medium text-amber-800 hover:underline flex-1"
           >
             {label}
           </Link>
         ) : (
-          <p className="text-xs text-stone-600 leading-snug line-clamp-3">{label}</p>
+          <p className="text-sm text-stone-600 flex-1">{label}</p>
         )}
         <button
           onClick={onRemove}
-          className="absolute top-1 right-1 w-4 h-4 rounded-full bg-white text-stone-400 hover:text-red-500 text-xs leading-none hidden group-hover:flex items-center justify-center shadow-sm border border-stone-200"
+          className="shrink-0 w-5 h-5 rounded-full text-stone-300 hover:text-red-500 hover:bg-red-50 text-base leading-none flex items-center justify-center transition-colors"
         >
           ×
         </button>
@@ -218,9 +204,10 @@ function MealCell({
   return (
     <button
       onClick={onAdd}
-      className="border-2 border-dashed border-stone-200 rounded-lg min-h-[64px] flex items-center justify-center text-stone-300 hover:border-amber-400 hover:text-amber-400 transition-colors text-xl"
+      className="flex items-center gap-1.5 text-stone-300 hover:text-amber-500 transition-colors text-sm"
     >
-      +
+      <span className="text-lg leading-none">+</span>
+      <span>Add</span>
     </button>
   )
 }
