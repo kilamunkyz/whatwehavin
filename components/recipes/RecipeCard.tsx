@@ -44,7 +44,12 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
               {CATEGORY_LABELS[recipe.category]}
             </span>
           </div>
-          <p className="text-xs text-stone-500">Serves {recipe.servings}</p>
+          <p className="text-xs text-stone-500">
+            Serves {recipe.servings}
+            {recipe.calories_per_serving !== null && (
+              <span className="ml-2 text-stone-400">· ~{recipe.calories_per_serving} kcal / person</span>
+            )}
+          </p>
           {recipe.tags.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {recipe.tags.slice(0, 3).map((tag) => (

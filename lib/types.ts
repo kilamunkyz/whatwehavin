@@ -41,6 +41,10 @@ export interface Recipe {
   source_url: string | null
   category: Category
   tags: string[]
+  calories_per_serving: number | null
+  protein_per_serving: number | null
+  carbs_per_serving: number | null
+  fat_per_serving: number | null
   created_at: string
   updated_at: string
 }

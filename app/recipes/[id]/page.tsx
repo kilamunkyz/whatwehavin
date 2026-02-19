@@ -37,6 +37,16 @@ export default async function RecipeDetailPage({
   const ingredients = [...r.recipe_ingredients].sort((a, b) => a.sort_order - b.sort_order)
   const steps = [...r.recipe_steps].sort((a, b) => a.step_number - b.step_number)
 
+  const initialNutrition =
+    r.calories_per_serving !== null
+      ? {
+          calories_per_serving: r.calories_per_serving!,
+          protein_per_serving: r.protein_per_serving!,
+          carbs_per_serving: r.carbs_per_serving!,
+          fat_per_serving: r.fat_per_serving!,
+        }
+      : null
+
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Header */}
@@ -100,11 +110,13 @@ export default async function RecipeDetailPage({
         </div>
       )}
 
-      {/* Ingredients with scaling */}
+      {/* Ingredients with scaling + nutrition */}
       <ScalingView
+        recipeId={id}
         defaultServings={r.servings}
         ingredients={ingredients}
         steps={steps}
+        initialNutrition={initialNutrition}
       />
     </div>
   )
