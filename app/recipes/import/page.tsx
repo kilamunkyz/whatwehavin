@@ -11,7 +11,7 @@ export default function ImportPage() {
           <span>Import</span>
         </div>
         <h1 className="text-2xl font-bold text-stone-800">Import a Recipe</h1>
-        <p className="text-stone-500 mt-1 text-sm">Paste a BBC Good Food URL and we'll fetch all the details automatically.</p>
+        <p className="text-stone-500 mt-1 text-sm">Search BBC Good Food or paste a URL to import a recipe automatically.</p>
       </div>
       <ImportForm />
     </div>
