@@ -98,7 +98,7 @@ function MenuCard({ menu }: { menu: Menu }) {
         {/* Header */}
         <div className="space-y-1">
           <p className="text-xs uppercase tracking-[0.4em] text-stone-300 font-sans">Est. Tonight</p>
-          <h2 className="text-4xl font-bold tracking-wide">WhatWeHavin</h2>
+          <h2 className="text-4xl font-bold tracking-wide">WhatWeHavin?</h2>
           <div className="flex items-center gap-3 justify-center mt-2">
             <div className="h-px flex-1 bg-stone-400/50" />
             <p className="text-xs text-stone-400 uppercase tracking-widest font-sans">Tonight&apos;s Menu</p>
