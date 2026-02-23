@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { LoginButton } from '@/components/ui/LoginButton'
+import { AuthForm } from '@/components/ui/AuthForm'
 import Image from 'next/image'
 
 export default async function HomePage() {
@@ -12,25 +12,17 @@ export default async function HomePage() {
   if (user) redirect('/recipes')
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 flex items-center justify-center">
-      <div className="text-center space-y-6 max-w-md mx-auto px-6">
-        <div className="flex justify-center">
-          <Image
-            src="/logo.png"
-            alt="WhatWeHavin"
-            width={320}
-            height={96}
-            className="w-72 h-auto"
-            priority
-          />
-        </div>
-        <div className="space-y-3 pt-2 text-stone-500 text-sm">
-          <p>📥 Import from BBC Good Food</p>
-          <p>📅 Weekly meal planner</p>
-          <p>🛒 Auto shopping list</p>
-          <p>🍽️ Pub menu inspiration</p>
-        </div>
-        <LoginButton />
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 flex items-center justify-center py-12">
+      <div className="flex flex-col items-center space-y-6 w-full max-w-sm mx-auto px-6">
+        <Image
+          src="/logo.png"
+          alt="WhatWeHavin"
+          width={320}
+          height={96}
+          className="w-64 h-auto"
+          priority
+        />
+        <AuthForm />
       </div>
     </div>
   )
