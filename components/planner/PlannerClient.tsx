@@ -184,19 +184,29 @@ function MealCell({
         {slot.recipe ? (
           <Link
             href={`/recipes/${slot.recipe.id}`}
-            className="text-sm font-medium text-amber-800 hover:underline flex-1"
+            className="text-sm font-medium text-amber-800 hover:underline flex-1 min-w-0 truncate"
           >
             {label}
           </Link>
         ) : (
-          <p className="text-sm text-stone-600 flex-1">{label}</p>
+          <p className="text-sm text-stone-600 flex-1 min-w-0 truncate">{label}</p>
         )}
-        <button
-          onClick={onRemove}
-          className="shrink-0 w-5 h-5 rounded-full text-stone-300 hover:text-red-500 hover:bg-red-50 text-base leading-none flex items-center justify-center transition-colors"
-        >
-          ×
-        </button>
+        <div className="flex items-center gap-1 shrink-0">
+          <button
+            onClick={onAdd}
+            title="Change"
+            className="w-5 h-5 rounded-full text-stone-300 hover:text-amber-500 hover:bg-amber-50 text-xs leading-none flex items-center justify-center transition-colors"
+          >
+            ↻
+          </button>
+          <button
+            onClick={onRemove}
+            title="Remove"
+            className="w-5 h-5 rounded-full text-stone-300 hover:text-red-500 hover:bg-red-50 text-base leading-none flex items-center justify-center transition-colors"
+          >
+            ×
+          </button>
+        </div>
       </div>
     )
   }

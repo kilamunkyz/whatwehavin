@@ -41,6 +41,7 @@ export default async function PlannerPage({
 
   return (
     <PlannerClient
+      key={weekStart}
       week={week as MealPlanWeek}
       initialSlots={(slots as MealPlanSlot[]) ?? []}
       allRecipes={(recipes as Recipe[]) ?? []}
